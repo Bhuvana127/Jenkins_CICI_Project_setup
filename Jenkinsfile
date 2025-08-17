@@ -9,7 +9,10 @@ pipeline {
     stages {
         stage('Checkout') {
             steps {
-                checkout scm
+                checkout scmGit(branches: [[name: '*/main']], 
+                extensions: [], 
+                userRemoteConfigs: [[credentialsId: 'Github_jenkins', 
+                                     url: 'https://github.com/Bhuvana127/Jenkins_CICI_Project_setup.git']])
             }
         }
         stage('Build') {
