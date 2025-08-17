@@ -1,0 +1,35 @@
+pipeline {
+    agent any
+    parameters {
+        choice(name: 'ACTION', choices: ['start', 'stop'], description: 'Choose EC2 action')
+    }
+    environment {
+        EC2_INSTANCE_ID = 'i-03f46b61958d868f5'
+        AWS_REGION = 'us-east-1' // Change to your region
+    }
+    stages {
+        stage('Start EC2') {
+            when {
+                expression { params.ACTION == 'start' }
+            }
+            steps {
+                echo "Starting EC2 instance ${EC2_INSTANCE_ID}..."
+                sh "aws ec2 start-instances --instance-ids ${EC2_INSTANCE_ID} --region ${AWS_REGION}"
+            }
+        }
+        stage('Stop EC2') {
+            when {
+                expression { params.ACTION == 'stop' }
+            }
+            steps {
+                echo "Stopping EC2 instance ${EC2_INSTANCE_ID}..."
+                sh "aws ec2 stop-instances --instance-ids ${EC2_INSTANCE_ID} --region ${AWS_REGION}"
+            }
+        }
+    }
+    post {
+        always {
+            echo 'EC2 action completed.'
+        }
+    }
+}
