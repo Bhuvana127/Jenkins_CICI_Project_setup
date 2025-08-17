@@ -1,50 +1,22 @@
+@Library('gitCheckout') _
+
 pipeline {
     agent any
-
-    environment {
-        // Define environment variables here
-        BUILD_ENV = 'production'
-    }
-
     stages {
         stage('Checkout') {
             steps {
-                checkout scmGit(branches: [[name: '*/main']], 
-                extensions: [], 
-                userRemoteConfigs: [[credentialsId: 'Github_jenkins', 
-                                     url: 'https://github.com/Bhuvana127/Jenkins_CICI_Project_setup.git']])
-            }
-        }
-        stage('Build') {
-            steps {
-                echo 'Building the project...'
-                // Example: sh 'npm install' or 'mvn clean package'
-            }
-        }
-        stage('Test') {
-            steps {
-                echo 'Running tests...'
-                // Example: sh 'npm test' or 'mvn test'
-            }
-        }
-        stage('Deploy') {
-            steps {
-                echo 'Deploying application...'
-                // Example: sh './deploy.sh' or use Jenkins deploy plugins
+                script {
+                    def config = [
+                        url: 'https://github.com/Bhuvana127/Hello-world-app-JAVA.git',
+                        branch: 'main',
+                        credentialsId: 'Jenkins-github'
+                    ]
+                gitCheckout(config)    
+                sh '''
+                    ls -lrt
+                    echo "Inside App repository & calling gitCheckout Library............."
+                '''                          
+                } 
             }
         }
     }
-
-    post {
-        always {
-            echo 'Cleaning up...'
-            // Example: clean workspace, send notifications, etc.
-        }
-        success {
-            echo 'Pipeline succeeded!'
-        }
-        failure {
-            echo 'Pipeline failed.'
-        }
-    }
-}
