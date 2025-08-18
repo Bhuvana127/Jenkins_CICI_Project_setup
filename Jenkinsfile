@@ -1,4 +1,4 @@
-@Library('gitCheckout@main') _
+@Library('my_library') _
 
 pipeline {
     agent any
