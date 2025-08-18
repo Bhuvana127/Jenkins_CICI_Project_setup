@@ -1,4 +1,4 @@
-@Library("gitCheckout") _
+@Library('gitCheckout@main') _
 
 pipeline {
     agent any
@@ -11,13 +11,20 @@ pipeline {
                         branch: 'main',
                         credentialsId: 'token_github'
                     ]
-                gitCheckout(config)    
-                sh '''
-                    ls -lrt
-                    echo "Inside App repository & calling gitCheckout Library............."
-                '''                          
-                } 
+                    echo "Starting checkout with config: ${config}"
+                    gitCheckout(config)
+                    sh '''
+                        pwd
+                        ls -lrt
+                        echo "Inside App repository & calling gitCheckout Library............."
+                    '''
+                }
             }
         }
     }
-}    
+    post {
+        failure {
+            echo 'Checkout failed. Check Git configuration or credentials.'
+        }
+    }
+}
