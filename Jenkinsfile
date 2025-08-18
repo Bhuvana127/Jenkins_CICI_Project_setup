@@ -29,7 +29,24 @@ pipeline {
                 '''
             }
         }
+        stage('Quality check SOnarQube') {
+            steps {
+                sh '''
+                   sonar-scanner
+                '''   
+            }
+        }
+        stage('Quality gate check') {
+            steps {
+                echo 'Checking quality gate status...'
+                timeout(time: 2, unit: 'MINUTES') {
+                      waitForQualityGate abortPipeline: true
+                }
+            }
+        }
+
     }
+    
     post {
         failure {
             echo 'Checkout failed. Check Git configuration or credentials.'
