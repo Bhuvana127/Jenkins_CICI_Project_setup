@@ -7,7 +7,7 @@ pipeline {
             steps {
                 script {
                     def config = [
-                        url: 'https://github.com/Bhuvana127/Hello-world-app-JAVA.git',
+                        url: 'https://github.com/Bhuvana127/maven_calculator_app-main.git',
                         branch: 'main',
                         credentialsId: 'Github_jenkins'
                     ]
@@ -19,6 +19,14 @@ pipeline {
                         echo "Inside App repository & calling gitCheckout Library............."
                     '''
                 }
+            }
+        }
+        stage('Vulnerability check') {
+            steps {
+                echo 'Running vulnerability scan........'
+                sh '''
+                    trivy image --exit-code 1 --severity CRITICAL python:latest
+                '''
             }
         }
     }
