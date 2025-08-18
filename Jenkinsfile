@@ -9,7 +9,7 @@ pipeline {
                     def config = [
                         url: 'https://github.com/Bhuvana127/Hello-world-app-JAVA.git',
                         branch: 'main',
-                        credentialsId: 'token_github'
+                        credentialsId: 'Github_jenkins'
                     ]
                     echo "Starting checkout with config: ${config}"
                     gitCheckout(config)
